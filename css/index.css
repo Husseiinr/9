@@ -7,12 +7,7 @@ html,body {
     background-attachment: fixed;
 }
 
-body {
-    min-height: 110vh;
-    min-width: 110vw;
-    position: relative;
-    font-family: 'Segoe UI', Arial, sans-serif;
-}
+
 .header {
     z-index: 2;
     position: absolute;
