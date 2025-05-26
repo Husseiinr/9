@@ -340,3 +340,10 @@ label {
     .ps-btn { width: 90px; height: 90px;}
     .ps-btn svg { width: 44px; height: 44px;}
 }
+body {
+    background-image: url('../1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+}
