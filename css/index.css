@@ -1,11 +1,4 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: #222222;
-}
-body {
+html,body {
     background-image: url('../1.jpg');
     background-size: cover;
     background-repeat: no-repeat;
