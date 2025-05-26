@@ -1,15 +1,16 @@
 html,body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+    h
     background-image: url('../1.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
 }
-
+body {
+    min-height: 100vh;
+    min-width: 100vw;
+    position: relative;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 .header {
     z-index: 2;
