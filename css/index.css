@@ -6,15 +6,10 @@ html,body {
     background-position: center center;
     background-attachment: fixed;
 }
+
 body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-body {
-    min-height: 100vh;
-    min-width: 100vw;
+    min-height: 110vh;
+    min-width: 110vw;
     position: relative;
     font-family: 'Segoe UI', Arial, sans-serif;
 }
