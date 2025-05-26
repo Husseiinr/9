@@ -6,10 +6,12 @@ html, body {
     background: #222222;
 }
 body {
-    min-height: 100vh;
-    min-width: 100vw;
-    position: relative;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    background-image: url('../1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+}
 }
 .header {
     z-index: 2;
@@ -339,11 +341,4 @@ label {
     .header-title { font-size: 1.3em; padding: 5px 14px;}
     .ps-btn { width: 90px; height: 90px;}
     .ps-btn svg { width: 44px; height: 44px;}
-}
-body {
-    background-image: url('../1.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
 }
