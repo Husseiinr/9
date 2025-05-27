@@ -49,7 +49,7 @@ function Loadpayloadlocal(PLfile){ //Loading Payload via Payload Param.
                         if (req.status === 200) {
                             //alert("Payload sent !");
                         }else{
-                            alert('Payload not sent !');
+                            //alert('Payload not sent !');
                             return;
                         }
                     })
@@ -170,6 +170,11 @@ export function load_WebrRTE(){
 
 export function load_ToDex(){
     Loadpayloadlocal("./payloads/Bins/Tools/ToDex.bin");
+
+}
+
+export function load_ToCex(){
+    Loadpayloadlocal("./payloads/Bins/Tools/ToCex.bin");
 
 }
 
