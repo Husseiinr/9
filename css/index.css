@@ -1,16 +1,9 @@
 html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: #222222;
-}
-
-body {
-    min-height: 100vh;
-    min-width: 100vw;
-    position: relative;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    background-image: url('../hussein.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
 .header {
