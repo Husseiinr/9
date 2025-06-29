@@ -1,9 +1,13 @@
 const ckbaj = document.getElementById('ckbaj');
+const ckbdc = document.getElementById('ckbdc');
 const visibleDiv = localStorage.getItem('visibleDiv') || 'jailbreak-page';
 const savedaj = localStorage.getItem('autojbstate');
+const savedc = localStorage.getItem('dbugc');
 const menuBtns = document.querySelectorAll('.menu-btn');
 const psBtns = document.querySelectorAll('.ps-btn');
 const plsbtn = document.querySelectorAll('.button-container button');
+
+var ps4fw
 
 window.addEventListener('DOMContentLoaded', loadsettings);
 
@@ -45,9 +49,19 @@ document.getElementById('update-exploit').addEventListener('click', () => {
 });
 
 ckbaj.addEventListener('change', (e) => {
-  alert("WARNING :\nThis option make the jailbreak unstable and this option is not recommended please use the jailbreak button instead !")
+  //alert("WARNING :\nThis option make the jailbreak unstable and this option is not recommended please use the jailbreak button instead !");
   localStorage.setItem('autojbstate', e.target.checked);
   onCheckboxChange(e.target.checked);
+});
+
+ckbdc.addEventListener('change', (e) => {
+  localStorage.setItem('dbugc', e.target.checked);
+  onCheckboxChange(e.target.checked);
+  if (ckbdc.checked) {
+    document.getElementById('DebugConsole').style.display  = 'flex';
+  } else {
+    document.getElementById('DebugConsole').style.display = 'none';
+  }
 });
 
 function isHttps() {
@@ -66,7 +80,7 @@ async function loadMultipleModules(files) {
 }
 
 function showabout() {
-  document.getElementById('about-popup').style.display = 'block'; // Show popup
+  document.getElementById('about-popup').style.display = 'flex'; // Show popup
   document.getElementById('overlay-popup').style.display = 'block'; // Show overlay
 }
 
@@ -76,7 +90,7 @@ function closeabout() {
 }
 
 function showsettings() {
-  document.getElementById('settings-popup').style.display = 'block'; // Show popup
+  document.getElementById('settings-popup').style.display = 'flex'; // Show popup
   document.getElementById('overlay-popup').style.display = 'block'; // Show overlay
 }
 
@@ -86,53 +100,84 @@ function closesettings() {
 }
 
 function CheckFW() {
-  var fwUA = navigator.userAgent.substring(navigator.userAgent.indexOf('5.0 (') + 19, navigator.userAgent.indexOf(') Apple'));
-  var FwUAR = fwUA.replace("layStation 4/","");
-  if (FwUAR == "9.00") {
-    document.getElementById('PS4FW').textContent = `PS4 FW: ${FwUAR} | Compatible`;
-    document.getElementById('PS4FW').style.color = 'green';
-  }else{
-    document.getElementById('PS4FW').textContent = `PS4 FW: ${FwUAR} | Incompatible`;
+  const userAgent = navigator.userAgent;
+  const ps4Regex = /PlayStation 4/;
+  const elementsToHide = [
+    'jailbreak-page', 'jailbreak', 'autojbchkb', 'agtext', 
+    'payloadsbtn', 'generate-cache-btn', 'update-exploit', 'settings-btn'
+  ];
+
+  if (ps4Regex.test(userAgent)) {
+    const firmwareMatch = userAgent.match(/PlayStation 4\/([\d.]+)/);
+    const fwVersion = firmwareMatch ? firmwareMatch[1] : null;
+
+    if (fwVersion === '9.00' || fwVersion === '9.03' || fwVersion === '9.60') {
+      document.getElementById('PS4FW').textContent = `PS4 FW: ${fwVersion} | Compatible`;
+      document.getElementById('PS4FW').style.color = 'green';
+      ps4fw = fwVersion.replace('.','');
+    } else if (fwVersion === '7.00' || fwVersion === '7.01' || fwVersion === '7.02' || fwVersion === '7.50' || fwVersion === '7.51' || fwVersion === '7.55' || fwVersion === fwVersion === '8.00' || fwVersion === '8.01' || fwVersion === '8.03' || fwVersion === '8.50' || fwVersion === '8.52' || fwVersion === '9.04' || fwVersion === '9.50' || fwVersion === '9.51') {
+      document.getElementById('PS4FW').textContent = `PS4 FW: ${fwVersion} | Semi-Compatible`;
+      document.getElementById('PS4FW').style.color = 'orange';
+      choosejb('HEN');
+      ps4fw = fwVersion.replace('.','');
+    } else {
+      document.getElementById('PS4FW').textContent = `PS4 FW: ${fwVersion || 'Unknown'} | Incompatible`;
+      document.getElementById('PS4FW').style.color = 'red';
+
+      elementsToHide.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+    }
+
+    document.title = "PSFree | " + fwVersion
+  } else {
+    let platform = 'Unknown platform';
+
+    if (/Android/.test(userAgent)) platform = 'Android';
+    else if (/iPhone|iPad|iPod/.test(userAgent)) platform = 'iOS';
+    else if (/Macintosh/.test(userAgent)) platform = 'MacOS';
+    else if (/Windows/.test(userAgent)) platform = 'Windows';
+    else if (/Linux/.test(userAgent)) platform = 'Linux';
+
+    document.getElementById('PS4FW').textContent = `You're not on a PS4, platform: ${platform}`;
     document.getElementById('PS4FW').style.color = 'red';
-    document.getElementById('jailbreak-page').style.display = 'none';
-    document.getElementById('jailbreak').style.display = 'none';
-    document.getElementById('autogoldhen').style.display = 'none';
-    document.getElementById('agtext').style.display = 'none';
-    document.getElementById('payloadsbtn').style.display = 'none';
-    document.getElementById('generate-cache-btn').style.display = 'none';
-    document.getElementById('update-exploit').style.display = 'none';
-  };
+
+    elementsToHide.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+  }
 }
 
 function checksettings() {
   if (localStorage.getItem('HEN')) {
     menuBtns.forEach(el => {
-      el.onmouseover = () => el.style.backgroundColor = '#00F0FF'; // Corrigé ici
-      el.onmouseout = () => el.style.backgroundColor = ''; // Remise à zéro en sortant
+      el.onmouseover = () => el.style.backgroundColor = '#00F0FF';
+      el.onmouseout = () => el.style.backgroundColor = '';
     });
 
     psBtns.forEach(el => {
       el.onmouseover = () => {
       el.style.boxShadow = '0 0px 48px #00F0FF, 0 0px 10px #000c';
-        // Vérifie si l'élément SVG existe avant d'essayer de changer sa couleur
         const svg = el.querySelector('svg');
         if (svg) svg.style.fill = '#00F0FF';
       };
       el.onmouseout = () => {
         el.style.boxShadow = '';
         const svg = el.querySelector('svg');
-        if (svg) svg.style.fill = ''; // Réinitialise la couleur si nécessaire
+        if (svg) svg.style.fill = '';
       };
     });
 
     plsbtn.forEach(btn => {
       btn.style.borderColor = '#00F0FF';
       btn.addEventListener('mouseenter', () => {
-        btn.style.backgroundColor = '#00F0FF'; // par exemple, changer la couleur de fond au hover
+        btn.style.backgroundColor = '#00F0FF';
       });
 
       btn.addEventListener('mouseleave', () => {
-        btn.style.backgroundColor = ''; // revenir à la couleur d'origine
+        btn.style.backgroundColor = ''; 
       });
     });
 
@@ -146,32 +191,31 @@ function checksettings() {
     });
   } else {
     menuBtns.forEach(el => {
-      el.onmouseover = () => el.style.backgroundColor = '#FFB84D'; // Corrigé ici
-      el.onmouseout = () => el.style.backgroundColor = ''; // Remise à zéro
+      el.onmouseover = () => el.style.backgroundColor = '#FFB84D';
+      el.onmouseout = () => el.style.backgroundColor = '';
     });
 
     psBtns.forEach(el => {
       el.onmouseover = () => {
         el.style.boxShadow = '0 0px 48px #FFB84D, 0 0px 10px #000c';
-        // Vérifie si l'élément SVG existe avant d'essayer de changer sa couleur
         const svg = el.querySelector('svg');
         if (svg) svg.style.fill = '#FFB84D';
       };
       el.onmouseout = () => {
         el.style.boxShadow = '';
         const svg = el.querySelector('svg');
-        if (svg) svg.style.fill = ''; // Réinitialise la couleur si nécessaire
+        if (svg) svg.style.fill = '';
       };
     });
 
     plsbtn.forEach(btn => {
       btn.style.borderColor = '#FFB84D';
       btn.addEventListener('mouseenter', () => {
-        btn.style.backgroundColor = '#FFB84D'; // par exemple, changer la couleur de fond au hover
+        btn.style.backgroundColor = '#FFB84D';
       });
 
       btn.addEventListener('mouseleave', () => {
-        btn.style.backgroundColor = ''; // revenir à la couleur d'origine
+        btn.style.backgroundColor = '';
       });
     });
 
@@ -258,14 +302,28 @@ function loadajbsettings(){
     ckbaj.checked = savedaj === 'true';
     onCheckboxChange(ckbaj.checked);
   }
+
+  if (savedc !== null){
+    ckbdc.checked = savedc === 'true';
+    onCheckboxChange(ckbdc.checked);
+  }
+
   if (ckbaj.checked) {
     if (sessionStorage.getItem('jbsuccess')) {
       console.log('Aleardy jailbroken !');
     } else {
+      document.getElementById('jailbreak').style.display = 'none';
+      document.getElementById('loader').style.display = 'flex';
       setTimeout(() => {
         jailbreak();
       }, 3000);
     }
+  }
+
+  if (ckbdc.checked) {
+    document.getElementById('DebugConsole').style.display  = 'flex';
+  } else {
+    document.getElementById('DebugConsole').style.display = 'none';
   }
 
   if (isHttps()) {
@@ -291,6 +349,8 @@ function loadajbsettings(){
 
 async function jailbreak() {
   try {
+    document.getElementById('jailbreak').style.display = 'none';
+    document.getElementById('loader').style.display = 'flex';
     const modules = await loadMultipleModules([
       '../payloads/Jailbreak.js',
       '../psfree/alert.mjs'
@@ -300,7 +360,7 @@ async function jailbreak() {
 
     if (localStorage.getItem('HEN')) {
       if (JailbreakModule && typeof JailbreakModule.HEN === 'function') {
-          JailbreakModule.HEN();
+          JailbreakModule.HEN(ps4fw);
       } else {
           console.error("HEN function not found in Jailbreak.js module");
       }
@@ -326,7 +386,6 @@ async function binloader() {
   try {
     sessionStorage.setItem('binloader', 1);
     const modules = await loadMultipleModules([
-      '../payloads/Jailbreak.js',
       '../psfree/alert.mjs'
     ]);
     console.log("All modules are loaded!");
@@ -370,11 +429,11 @@ async function Loadpayloads(payload) {
   }
 }
 
-async function loadsettings() {
-  CheckFW();
+function loadsettings() {
   loadajbsettings();
   loadjbflavor();
   checksettings();
+  CheckFW();
 }
 
 function onCheckboxChange(checked) {
