@@ -130,7 +130,7 @@ function CheckFW() {
       });
     }
 
-    document.title = "PSFree | " + fwVersion
+    document.title = "BONDOK | " + fwVersion
   } else {
     let platform = 'Unknown platform';
 
