@@ -298,6 +298,16 @@ function savejbflavor() {
 }
 
 function loadajbsettings(){
+// --- Force GoldHEN and Auto-Jailbreak selection ---
+localStorage.setItem('selectedHEN', 'GoldHEN');
+localStorage.setItem('GoldHEN', 1);
+localStorage.removeItem('HEN');
+ckbaj.checked = true;
+localStorage.setItem('autojbstate', 'true');
+const goldHENRadio = document.querySelector('input[name="hen"][value="GoldHEN"]');
+if (goldHENRadio) goldHENRadio.checked = true;
+choosejb('GoldHEN');
+// --------------------------------------------------  
   if (savedaj !== null) {
     ckbaj.checked = savedaj === 'true';
     onCheckboxChange(ckbaj.checked);
@@ -308,17 +318,17 @@ function loadajbsettings(){
     onCheckboxChange(ckbdc.checked);
   }
 
-  if (ckbaj.checked) {
+  if (ckbaj.checked && localStorage.getItem('selectedHEN') === 'GoldHEN') {
     if (sessionStorage.getItem('jbsuccess')) {
-      console.log('Aleardy jailbroken !');
+        console.log('Already jailbroken!');
     } else {
-      document.getElementById('jailbreak').style.display = 'none';
-      document.getElementById('loader').style.display = 'flex';
-      setTimeout(() => {
-        jailbreak();
-      }, 3000);
+        document.getElementById('jailbreak').style.display = 'none';
+        document.getElementById('loader').style.display = 'flex';
+        setTimeout(() => {
+            jailbreak();
+        }, 1000); // run faster after cache
     }
-  }
+}
 
   if (ckbdc.checked) {
     document.getElementById('DebugConsole').style.display  = 'flex';
